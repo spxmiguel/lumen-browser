@@ -3,9 +3,9 @@
 /* ── Design tokens — overridden by .lumentheme at runtime ─────── */
 :root {
   /* Layout */
-  --lumen-toolbar-height:        88px;
-  --lumen-tab-height:            36px;
-  --lumen-nav-height:            52px;   /* = toolbar - tab */
+  --lumen-toolbar-height:        85px;
+  --lumen-tab-height:            33px;
+  --lumen-nav-height:            52px;
   --lumen-sidebar-width:         320px;
 
   /* Colors */
@@ -21,9 +21,9 @@
   --lumen-addressbar-bg:         rgba(58, 58, 60, 0.80);
   --lumen-addressbar-focus-bg:   rgba(72, 72, 74, 0.95);
   --lumen-addressbar-focus-ring: rgba(10, 132, 255, 0.45);
-  --lumen-addressbar-radius:     10px;
-  --lumen-addressbar-height:     32px;
-  --lumen-addressbar-max-width:  540px;
+  --lumen-addressbar-radius:     9999px;
+  --lumen-addressbar-height:     31px;
+  --lumen-addressbar-max-width:  600px;
   --lumen-accent:                #0a84ff;
   --lumen-glass-blur:            24px;
   --lumen-glass-border:          rgba(255, 255, 255, 0.08);
@@ -104,9 +104,9 @@ html, body {
 .tab {
   display: flex;
   align-items: center;
-  height: 30px;
+  height: 29px;
   padding: 0 8px;
-  border-radius: 8px 8px 0 0;
+  border-radius: 6px 6px 0 0;
   background: var(--lumen-tab-inactive-bg);
   gap: 6px;
   min-width: 80px;
@@ -242,7 +242,7 @@ html, body {
   outline: none;
   color: var(--lumen-toolbar-text);
   font-family: var(--lumen-font);
-  font-size: 13px;
+  font-size: 14px;
   letter-spacing: 0.01em;
   min-width: 0;
 }

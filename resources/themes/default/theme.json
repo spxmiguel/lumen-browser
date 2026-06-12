@@ -6,39 +6,69 @@
     "author": ""
   },
   "colors": {
-    "toolbar_bg":      "#1c1c1e",
-    "toolbar_text":    "#ffffff",
-    "tab_active_bg":   "#2c2c2e",
-    "tab_inactive_bg": "#1c1c1e",
-    "addressbar_bg":   "#2c2c2e",
-    "accent":          "#0a84ff"
+    "toolbar_bg":         "rgba(28,28,30,0.92)",
+    "tab_bar_bg":         "rgba(28,28,30,0.97)",
+    "nav_bar_bg":         "rgba(36,36,38,0.92)",
+    "toolbar_text":       "rgba(255,255,255,0.88)",
+    "toolbar_text_dim":   "rgba(255,255,255,0.45)",
+    "tab_active_bg":      "rgba(58,58,60,0.95)",
+    "tab_inactive_bg":    "transparent",
+    "tab_hover_bg":       "rgba(255,255,255,0.07)",
+    "tab_border":         "rgba(255,255,255,0.10)",
+    "addressbar_bg":      "rgba(58,58,60,0.80)",
+    "addressbar_focus_bg":"rgba(72,72,74,0.95)",
+    "addressbar_ring":    "rgba(10,132,255,0.45)",
+    "glass_border":       "rgba(255,255,255,0.08)",
+    "button_hover_bg":    "rgba(255,255,255,0.10)",
+    "button_active_bg":   "rgba(255,255,255,0.16)",
+    "accent":             "#0a84ff"
   },
   "typography": {
-    "ui_font_family": "-apple-system, 'Segoe UI', sans-serif",
-    "ui_font_size":   "13px"
+    "ui_font_family": "-apple-system, 'SF Pro Text', 'Segoe UI', sans-serif",
+    "ui_font_size":   "13px",
+    "url_font_size":  "14px"
   },
   "geometry": {
-    "toolbar_height":           52,
-    "tab_height":               36,
-    "addressbar_border_radius": 8,
-    "sidebar_width":            320
+    "toolbar_height":          85,
+    "tab_height":              33,
+    "nav_height":              52,
+    "addressbar_height":       31,
+    "addressbar_border_radius":9999,
+    "addressbar_max_width":    600,
+    "sidebar_width":           320,
+    "icon_size":               17,
+    "button_size":             32,
+    "button_radius":           8
   },
   "effects": {
-    "toolbar_blur":        false,
-    "toolbar_blur_amount": 20,
-    "toolbar_opacity":     1.0
+    "toolbar_blur":        true,
+    "toolbar_blur_amount": 24,
+    "toolbar_opacity":     0.92,
+    "icon_filter":         "invert(1) opacity(0.78)",
+    "icon_filter_hover":   "invert(1) opacity(1.0)",
+    "icon_filter_disabled":"invert(1) opacity(0.25)"
   },
   "icons": {
-    "back":    "icons/back.svg",
-    "forward": "icons/forward.svg",
-    "reload":  "icons/reload.svg",
-    "sidebar": "icons/sidebar.svg",
-    "settings":"icons/settings.svg"
+    "back":         "icons/back.svg",
+    "forward":      "icons/forward.svg",
+    "reload":       "icons/reload.svg",
+    "share":        "icons/share.svg",
+    "newtab":       "icons/newtab.svg",
+    "sidebar":      "icons/sidebar.svg",
+    "reader":       "icons/reader.svg",
+    "download":     "icons/download.svg",
+    "bookmark":     "icons/bookmark.svg",
+    "profile":      "icons/profile.svg",
+    "translate":    "icons/translate.svg",
+    "settings":     "icons/settings.svg",
+    "tab_overview": "icons/tab-overview.svg"
   },
   "newtab": {
-    "background_image": "",
-    "show_search_bar":  true,
-    "show_clock":       true
+    "background_image":  "",
+    "background_color":  "#1c1c1e",
+    "show_search_bar":   true,
+    "show_clock":        true,
+    "show_quick_links":  true
   },
   "css_overrides": ""
 }
