@@ -1,0 +1,44 @@
+{
+  "$schema": "lumen-theme/v1",
+  "meta": {
+    "name": "Default",
+    "version": "1.0.0",
+    "author": ""
+  },
+  "colors": {
+    "toolbar_bg":      "#1c1c1e",
+    "toolbar_text":    "#ffffff",
+    "tab_active_bg":   "#2c2c2e",
+    "tab_inactive_bg": "#1c1c1e",
+    "addressbar_bg":   "#2c2c2e",
+    "accent":          "#0a84ff"
+  },
+  "typography": {
+    "ui_font_family": "-apple-system, 'Segoe UI', sans-serif",
+    "ui_font_size":   "13px"
+  },
+  "geometry": {
+    "toolbar_height":           52,
+    "tab_height":               36,
+    "addressbar_border_radius": 8,
+    "sidebar_width":            320
+  },
+  "effects": {
+    "toolbar_blur":        false,
+    "toolbar_blur_amount": 20,
+    "toolbar_opacity":     1.0
+  },
+  "icons": {
+    "back":    "icons/back.svg",
+    "forward": "icons/forward.svg",
+    "reload":  "icons/reload.svg",
+    "sidebar": "icons/sidebar.svg",
+    "settings":"icons/settings.svg"
+  },
+  "newtab": {
+    "background_image": "",
+    "show_search_bar":  true,
+    "show_clock":       true
+  },
+  "css_overrides": ""
+}

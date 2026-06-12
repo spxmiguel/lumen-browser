@@ -1,0 +1,268 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Design tokens — overridden by .lumentheme at runtime ─────── */
+:root {
+  /* Layout */
+  --lumen-toolbar-height:        88px;
+  --lumen-tab-height:            36px;
+  --lumen-nav-height:            52px;   /* = toolbar - tab */
+  --lumen-sidebar-width:         320px;
+
+  /* Colors */
+  --lumen-toolbar-bg:            rgba(28, 28, 30, 0.92);
+  --lumen-tab-bar-bg:            rgba(28, 28, 30, 0.97);
+  --lumen-nav-bar-bg:            rgba(36, 36, 38, 0.92);
+  --lumen-toolbar-text:          rgba(255, 255, 255, 0.88);
+  --lumen-toolbar-text-dim:      rgba(255, 255, 255, 0.45);
+  --lumen-tab-active-bg:         rgba(58, 58, 60, 0.95);
+  --lumen-tab-inactive-bg:       transparent;
+  --lumen-tab-hover-bg:          rgba(255, 255, 255, 0.07);
+  --lumen-tab-border:            rgba(255, 255, 255, 0.10);
+  --lumen-addressbar-bg:         rgba(58, 58, 60, 0.80);
+  --lumen-addressbar-focus-bg:   rgba(72, 72, 74, 0.95);
+  --lumen-addressbar-focus-ring: rgba(10, 132, 255, 0.45);
+  --lumen-addressbar-radius:     10px;
+  --lumen-addressbar-height:     32px;
+  --lumen-addressbar-max-width:  540px;
+  --lumen-accent:                #0a84ff;
+  --lumen-glass-blur:            24px;
+  --lumen-glass-border:          rgba(255, 255, 255, 0.08);
+  --lumen-icon-color:            rgba(255, 255, 255, 0.80);
+  --lumen-icon-hover-color:      rgba(255, 255, 255, 1.0);
+  --lumen-icon-disabled-color:   rgba(255, 255, 255, 0.25);
+  --lumen-button-hover-bg:       rgba(255, 255, 255, 0.10);
+  --lumen-button-active-bg:      rgba(255, 255, 255, 0.16);
+  --lumen-toolbar-opacity:       1;
+  --lumen-font:                  -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
+}
+
+/* ── Base ─────────────────────────────────────────────────────── */
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  color: var(--lumen-toolbar-text);
+  font-family: var(--lumen-font);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ── Tab bar ─────────────────────────────────────────────────── */
+#tab-bar {
+  display: flex;
+  align-items: center;
+  height: var(--lumen-tab-height);
+  padding: 4px 6px 0;
+  gap: 2px;
+  background: var(--lumen-tab-bar-bg);
+  border-bottom: 1px solid var(--lumen-glass-border);
+  -webkit-app-region: drag;
+}
+
+/* Profile chip */
+.profile-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px 2px 6px;
+  border: none;
+  border-radius: 14px;
+  background: var(--lumen-tab-active-bg);
+  color: var(--lumen-toolbar-text);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  height: 26px;
+  min-width: 0;
+  flex-shrink: 0;
+  -webkit-app-region: no-drag;
+}
+.profile-chip svg { width: 14px; height: 14px; flex-shrink: 0; }
+.profile-chip .profile-chevron { opacity: 0.5; width: 11px; height: 11px; }
+.profile-chip:hover { background: var(--lumen-button-hover-bg); }
+
+/* Tab scroll container */
+#tabs-scroll {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+  -webkit-app-region: drag;
+}
+#tabs-list {
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  height: 100%;
+  -webkit-app-region: drag;
+}
+
+/* Individual tab */
+.tab {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 8px;
+  border-radius: 8px 8px 0 0;
+  background: var(--lumen-tab-inactive-bg);
+  gap: 6px;
+  min-width: 80px;
+  max-width: 210px;
+  cursor: pointer;
+  color: var(--lumen-toolbar-text-dim);
+  transition: background 0.15s, color 0.15s;
+  -webkit-app-region: no-drag;
+}
+.tab:hover { background: var(--lumen-tab-hover-bg); color: var(--lumen-toolbar-text); }
+.tab.active {
+  background: var(--lumen-tab-active-bg);
+  color: var(--lumen-toolbar-text);
+  border: 1px solid var(--lumen-glass-border);
+  border-bottom: none;
+}
+.tab .favicon { width: 14px; height: 14px; flex-shrink: 0; border-radius: 2px; }
+.tab-title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.tab-close {
+  background: none; border: none; color: inherit; cursor: pointer;
+  padding: 0; border-radius: 50%; width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; opacity: 0; transition: opacity 0.1s;
+  -webkit-app-region: no-drag;
+}
+.tab:hover .tab-close { opacity: 0.55; }
+.tab-close:hover { opacity: 1 !important; background: rgba(255,255,255,0.18); }
+
+/* New-tab button in tab bar */
+#new-tab-btn {
+  width: 28px; height: 28px;
+  flex-shrink: 0;
+  -webkit-app-region: no-drag;
+}
+
+/* ── Nav bar ─────────────────────────────────────────────────── */
+#nav-bar {
+  display: flex;
+  align-items: center;
+  height: var(--lumen-nav-height);
+  padding: 0 10px;
+  background: var(--lumen-nav-bar-bg);
+  backdrop-filter: blur(var(--lumen-glass-blur));
+  -webkit-backdrop-filter: blur(var(--lumen-glass-blur));
+  border-bottom: 1px solid var(--lumen-glass-border);
+  position: relative;     /* anchor for the absolute URL bar */
+  -webkit-app-region: drag;
+}
+
+/* Left + right button groups */
+#nav-left, #nav-right {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  z-index: 1;             /* above the absolute URL bar */
+}
+#nav-right { margin-left: auto; }
+
+/* ── Icon buttons ─────────────────────────────────────────────── */
+.icon-btn {
+  background: none;
+  border: none;
+  color: var(--lumen-icon-color);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, opacity 0.12s;
+  -webkit-app-region: no-drag;
+}
+.icon-btn img {
+  width: 17px;
+  height: 17px;
+  /* SVGs are black — invert to white, adjust for dark toolbar */
+  filter: var(--lumen-icon-filter, invert(1) opacity(0.78));
+  pointer-events: none;
+}
+.icon-btn:hover {
+  background: var(--lumen-button-hover-bg);
+}
+.icon-btn:hover img {
+  filter: var(--lumen-icon-filter-hover, invert(1) opacity(1));
+}
+.icon-btn:active {
+  background: var(--lumen-button-active-bg);
+}
+.icon-btn:disabled {
+  cursor: default;
+}
+.icon-btn:disabled img {
+  filter: var(--lumen-icon-filter-disabled, invert(1) opacity(0.25));
+}
+
+/* ── Address bar — absolute center ─────────────────────────────── */
+#address-bar-wrap {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--lumen-addressbar-max-width);
+  max-width: calc(100% - 280px);   /* never overlap nav-left/right */
+  height: var(--lumen-addressbar-height);
+  background: var(--lumen-addressbar-bg);
+  border-radius: var(--lumen-addressbar-radius);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 6px;
+  transition: background 0.15s, box-shadow 0.15s;
+  -webkit-app-region: no-drag;
+  z-index: 0;
+}
+#address-bar-wrap:focus-within {
+  background: var(--lumen-addressbar-focus-bg);
+  box-shadow: 0 0 0 3px var(--lumen-addressbar-focus-ring);
+}
+
+.favicon-sm {
+  width: 14px; height: 14px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  display: none;
+}
+.favicon-sm.visible { display: block; }
+
+#address-bar {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--lumen-toolbar-text);
+  font-family: var(--lumen-font);
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  min-width: 0;
+}
+#address-bar::placeholder { color: var(--lumen-toolbar-text-dim); }
+#address-bar::selection { background: rgba(10,132,255,0.30); }
+
+.url-clear-btn {
+  background: none;
+  border: none;
+  color: var(--lumen-toolbar-text-dim);
+  padding: 0;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  -webkit-app-region: no-drag;
+}
+.url-clear-btn svg { width: 14px; height: 14px; }
+.url-clear-btn:hover { color: var(--lumen-toolbar-text); }
+#address-bar-wrap:focus-within .url-clear-btn { display: flex; }

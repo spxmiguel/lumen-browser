@@ -1,0 +1,7 @@
+! EasyList placeholder
+! Download the real list from: https://easylist.to/easylist/easylist.txt
+! Place it here before building.
+!
+! [Adblock Plus 2.0]
+! Version: placeholder
+! Title: EasyList placeholder

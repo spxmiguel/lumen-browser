@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="lumen://sidebar/sidebar.css">
+<title>Sidebar</title>
+</head>
+<body>
+<div id="sidebar">
+  <div id="app-list">
+    <button class="app-btn active" data-url="https://chat.openai.com" title="ChatGPT">
+      <span class="app-label">GPT</span>
+    </button>
+    <button class="app-btn" data-url="https://claude.ai" title="Claude">
+      <span class="app-label">Cld</span>
+    </button>
+    <button class="app-btn" data-url="https://gemini.google.com" title="Gemini">
+      <span class="app-label">Gem</span>
+    </button>
+    <button class="app-btn" data-url="https://web.whatsapp.com" title="WhatsApp">
+      <span class="app-label">WA</span>
+    </button>
+    <button class="app-btn" data-url="https://discord.com/app" title="Discord">
+      <span class="app-label">Dsc</span>
+    </button>
+    <button class="app-btn" data-url="https://open.spotify.com" title="Spotify">
+      <span class="app-label">Spt</span>
+    </button>
+  </div>
+  <div id="app-frame-wrap">
+    <iframe id="app-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+  </div>
+</div>
+
+<script src="lumen://sidebar/sidebar.js"></script>
+</body>
+</html>

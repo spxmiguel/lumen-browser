@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="lumen://newtab/newtab.css">
+<title>New Tab</title>
+</head>
+<body>
+<div id="newtab">
+  <div id="clock-wrap">
+    <div id="clock">00:00</div>
+    <div id="date-label"></div>
+  </div>
+
+  <div id="search-wrap">
+    <form id="search-form">
+      <input id="search-input" type="text" placeholder="Search the web…" autocomplete="off" spellcheck="false">
+    </form>
+  </div>
+
+  <div id="quick-links">
+    <a class="ql-item" href="https://google.com">
+      <div class="ql-icon">G</div>
+      <span>Google</span>
+    </a>
+    <a class="ql-item" href="https://github.com">
+      <div class="ql-icon">GH</div>
+      <span>GitHub</span>
+    </a>
+    <a class="ql-item" href="https://youtube.com">
+      <div class="ql-icon">YT</div>
+      <span>YouTube</span>
+    </a>
+    <a class="ql-item" href="https://chat.openai.com">
+      <div class="ql-icon">AI</div>
+      <span>ChatGPT</span>
+    </a>
+  </div>
+</div>
+
+<script>
+(function() {
+  const clock = document.getElementById('clock');
+  const dateEl = document.getElementById('date-label');
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function tick() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    clock.textContent = h + ':' + m;
+    dateEl.textContent = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate();
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  document.getElementById('search-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const q = document.getElementById('search-input').value.trim();
+    if (!q) return;
+    window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(q);
+  });
+})();
+</script>
+</body>
+</html>

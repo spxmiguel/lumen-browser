@@ -1,0 +1,40 @@
+# CEF binary distribution (~250MB, download separately per BUILDING.md)
+third_party/cef/
+
+# Private theme assets — Apple-style or other proprietary assets
+themes-private/
+!themes-private/.gitkeep
+
+# Build outputs
+build/
+out/
+*.exe
+*.dll
+*.lib
+*.pdb
+*.obj
+*.ilk
+*.exp
+
+# User data (local only)
+userdata/
+*.lumentheme
+
+# IDE
+.vs/
+.vscode/settings.json
+.vscode/*.json
+*.user
+*.suo
+.idea/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+
+# Ninja
+.ninja_deps
+.ninja_log

@@ -1,0 +1,106 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: #000;
+  color: #fff;
+  font-family: -apple-system, 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
+
+#onboarding {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 30%, #1a1a2e 0%, #0d0d0d 100%);
+  position: relative;
+  padding: 40px;
+}
+
+.step {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  max-width: 460px;
+}
+.step.active { display: flex; }
+
+.step-icon { font-size: 56px; line-height: 1; }
+
+h1 { font-size: 32px; font-weight: 600; }
+h2 { font-size: 26px; font-weight: 600; }
+p  { font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+
+.step-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  align-items: center;
+}
+
+.btn-primary {
+  background: #0a84ff;
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 13px 36px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 280px;
+  transition: background 0.15s;
+}
+.btn-primary:hover { background: #0070d8; }
+
+.btn-secondary {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.45);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 6px;
+}
+.btn-secondary:hover { color: rgba(255,255,255,0.7); }
+
+/* Engine grid */
+.engine-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.engine-btn {
+  background: rgba(255,255,255,0.07);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  color: rgba(255,255,255,0.8);
+  font-size: 14px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.engine-btn:hover  { background: rgba(255,255,255,0.12); color: #fff; }
+.engine-btn.active { border-color: #0a84ff; color: #fff; background: rgba(10,132,255,0.15); }
+
+/* Progress dots */
+#progress {
+  position: absolute;
+  bottom: 32px;
+  display: flex;
+  gap: 8px;
+}
+.dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  transition: background 0.2s;
+}
+.dot.active { background: #0a84ff; }

@@ -1,0 +1,152 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --lumen-toolbar-bg:    #1c1c1e;
+  --lumen-toolbar-text:  #ffffff;
+  --lumen-tab-active-bg: #2c2c2e;
+  --lumen-addressbar-bg: #2c2c2e;
+  --lumen-accent:        #0a84ff;
+}
+
+html, body {
+  height: 100%;
+  background: #000000;
+  color: var(--lumen-toolbar-text);
+  font-family: -apple-system, 'Segoe UI', sans-serif;
+  font-size: 14px;
+}
+
+#settings-layout {
+  display: flex;
+  height: 100%;
+}
+
+/* ── Sidebar nav ─────────────────────────────────────────────────── */
+#settings-nav {
+  width: 220px;
+  min-width: 220px;
+  background: var(--lumen-toolbar-bg);
+  border-right: 1px solid rgba(255,255,255,0.07);
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+}
+
+.nav-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.35);
+  padding: 12px 8px 4px;
+}
+
+.nav-item {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.75);
+  padding: 7px 12px;
+  border-radius: 8px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 400;
+}
+.nav-item:hover  { background: rgba(255,255,255,0.07); color: #fff; }
+.nav-item.active { background: var(--lumen-tab-active-bg); color: #fff; font-weight: 500; }
+
+/* ── Content ─────────────────────────────────────────────────────── */
+#settings-content {
+  flex: 1;
+  padding: 32px 40px;
+  overflow-y: auto;
+  background: #111113;
+}
+
+.settings-section { display: none; }
+.settings-section.active { display: block; }
+
+h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #fff;
+}
+
+.setting-group {
+  background: var(--lumen-toolbar-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.setting-row:last-child { border-bottom: none; }
+
+label { color: rgba(255,255,255,0.85); font-size: 14px; }
+
+input[type="text"],
+input[type="number"],
+select {
+  background: var(--lumen-addressbar-bg);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 13px;
+  outline: none;
+  min-width: 180px;
+}
+input[type="range"] {
+  width: 140px;
+  accent-color: var(--lumen-accent);
+}
+
+.row-actions { display: flex; gap: 8px; }
+
+.btn-secondary {
+  background: var(--lumen-addressbar-bg);
+  border: none;
+  border-radius: 8px;
+  color: var(--lumen-accent);
+  padding: 7px 14px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.btn-secondary:hover { background: rgba(10,132,255,0.15); }
+
+/* ── Toggle switch ───────────────────────────────────────────────── */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 26px;
+}
+.toggle input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute;
+  inset: 0;
+  border-radius: 26px;
+  background: rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.slider::before {
+  content: '';
+  position: absolute;
+  width: 20px; height: 20px;
+  left: 3px; top: 3px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+}
+.toggle input:checked + .slider { background: var(--lumen-accent); }
+.toggle input:checked + .slider::before { transform: translateX(18px); }

@@ -1,0 +1,7 @@
+! Tracker blocklist placeholder
+! Download from: https://disconnect.me/trackerprotection
+! Or use: https://raw.githubusercontent.com/nicehash/disconnect-tracking-protection/master/services.json
+! Place converted domain list here before building.
+!
+! [Adblock Plus 2.0]
+! Title: Tracker blocklist placeholder

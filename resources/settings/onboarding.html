@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="lumen://onboarding/onboarding.css">
+<title>Welcome to Lumen</title>
+</head>
+<body>
+<div id="onboarding">
+
+  <!-- Step 1: Welcome -->
+  <div class="step active" id="step-1">
+    <div class="step-icon">🌟</div>
+    <h1>Welcome to Lumen</h1>
+    <p>A fast, private, fully customizable browser for Windows.</p>
+    <button class="btn-primary" data-next="2">Get started</button>
+  </div>
+
+  <!-- Step 2: Default browser -->
+  <div class="step" id="step-2">
+    <div class="step-icon">🔗</div>
+    <h2>Set as default browser</h2>
+    <p>Open links from apps and emails directly in Lumen.</p>
+    <div class="step-actions">
+      <button class="btn-primary"   id="btn-set-default">Set as default</button>
+      <button class="btn-secondary" data-next="3">Skip</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Import bookmarks -->
+  <div class="step" id="step-3">
+    <div class="step-icon">📑</div>
+    <h2>Import bookmarks</h2>
+    <p>Bring your bookmarks from Chrome or Firefox.</p>
+    <div class="step-actions">
+      <button class="btn-primary"   id="btn-import-chrome">Import from Chrome</button>
+      <button class="btn-primary"   id="btn-import-firefox">Import from Firefox</button>
+      <button class="btn-secondary" data-next="4">Skip</button>
+    </div>
+  </div>
+
+  <!-- Step 4: Search engine -->
+  <div class="step" id="step-4">
+    <div class="step-icon">🔍</div>
+    <h2>Choose your search engine</h2>
+    <div class="engine-grid" id="engine-grid">
+      <button class="engine-btn active" data-engine="google">Google</button>
+      <button class="engine-btn"        data-engine="duckduckgo">DuckDuckGo</button>
+      <button class="engine-btn"        data-engine="bing">Bing</button>
+      <button class="engine-btn"        data-engine="yahoo">Yahoo</button>
+      <button class="engine-btn"        data-engine="brave">Brave</button>
+    </div>
+    <button class="btn-primary" data-next="5">Continue</button>
+  </div>
+
+  <!-- Step 5: Done -->
+  <div class="step" id="step-5">
+    <div class="step-icon">✅</div>
+    <h2>You're all set!</h2>
+    <p>Lumen is ready. Enjoy the web.</p>
+    <button class="btn-primary" id="btn-finish">Start browsing</button>
+  </div>
+
+  <!-- Progress dots -->
+  <div id="progress">
+    <span class="dot active"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div>
+</div>
+
+<script>
+(function() {
+  function query(req) {
+    if (window.lumenQuery)
+      window.lumenQuery({ request: req, persistent: false, onSuccess(){}, onFailure(){} });
+  }
+
+  let current = 1;
+  const steps = document.querySelectorAll('.step');
+  const dots   = document.querySelectorAll('.dot');
+
+  function goTo(n) {
+    steps.forEach((s,i) => s.classList.toggle('active', i+1 === n));
+    dots.forEach((d,i)  => d.classList.toggle('active',  i+1 === n));
+    current = n;
+  }
+
+  document.getElementById('onboarding').addEventListener('click', e => {
+    const next = e.target.dataset.next;
+    if (next) goTo(Number(next));
+  });
+
+  document.getElementById('engine-grid')?.addEventListener('click', e => {
+    const btn = e.target.closest('.engine-btn');
+    if (!btn) return;
+    document.querySelectorAll('.engine-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    query('settings:search_engine:' + btn.dataset.engine);
+  });
+
+  document.getElementById('btn-set-default')
+    ?.addEventListener('click', () => { query('system:set_default_browser'); goTo(3); });
+  document.getElementById('btn-import-chrome')
+    ?.addEventListener('click', () => { query('bookmarks:import:chrome');  goTo(4); });
+  document.getElementById('btn-import-firefox')
+    ?.addEventListener('click', () => { query('bookmarks:import:firefox'); goTo(4); });
+  document.getElementById('btn-finish')
+    ?.addEventListener('click', () => query('navigate:lumen://newtab'));
+})();
+</script>
+</body>
+</html>

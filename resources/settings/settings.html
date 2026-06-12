@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="lumen://settings/settings.css">
+<title>Settings</title>
+</head>
+<body>
+<div id="settings-layout">
+  <nav id="settings-nav">
+    <div class="nav-section-label">General</div>
+    <button class="nav-item active" data-section="general">General</button>
+    <button class="nav-item"        data-section="appearance">Appearance</button>
+    <button class="nav-item"        data-section="privacy">Privacy &amp; Security</button>
+    <button class="nav-item"        data-section="performance">Performance</button>
+    <button class="nav-item"        data-section="sidebar">Sidebar</button>
+    <button class="nav-item"        data-section="search">Search</button>
+    <div class="nav-section-label">Advanced</div>
+    <button class="nav-item"        data-section="advanced">Advanced</button>
+  </nav>
+
+  <main id="settings-content">
+
+    <!-- General -->
+    <section class="settings-section active" id="sec-general">
+      <h2>General</h2>
+      <div class="setting-group">
+        <div class="setting-row">
+          <label>Homepage</label>
+          <input type="text" id="s-homepage" placeholder="lumen://newtab">
+        </div>
+        <div class="setting-row">
+          <label>Default search engine</label>
+          <select id="s-search-engine">
+            <option value="google">Google</option>
+            <option value="duckduckgo">DuckDuckGo</option>
+            <option value="bing">Bing</option>
+            <option value="yahoo">Yahoo</option>
+            <option value="brave">Brave Search</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <label>Download location</label>
+          <input type="text" id="s-downloads" placeholder="Default Downloads folder">
+        </div>
+      </div>
+    </section>
+
+    <!-- Appearance -->
+    <section class="settings-section" id="sec-appearance">
+      <h2>Appearance</h2>
+      <div class="setting-group">
+        <div class="setting-row">
+          <label>Theme</label>
+          <div class="row-actions">
+            <button class="btn-secondary" id="btn-import-theme">Import .lumentheme</button>
+            <button class="btn-secondary" id="btn-export-theme">Export theme</button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <label>Toolbar blur</label>
+          <label class="toggle">
+            <input type="checkbox" id="s-toolbar-blur">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <label>Toolbar opacity</label>
+          <input type="range" id="s-toolbar-opacity" min="0.4" max="1" step="0.05" value="1">
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy -->
+    <section class="settings-section" id="sec-privacy">
+      <h2>Privacy &amp; Security</h2>
+      <div class="setting-group">
+        <div class="setting-row">
+          <label>Block ads</label>
+          <label class="toggle">
+            <input type="checkbox" id="s-adblock" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <label>Block trackers</label>
+          <label class="toggle">
+            <input type="checkbox" id="s-antitrack" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <label>Fingerprint protection</label>
+          <label class="toggle">
+            <input type="checkbox" id="s-fingerprint" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Performance -->
+    <section class="settings-section" id="sec-performance">
+      <h2>Performance</h2>
+      <div class="setting-group">
+        <div class="setting-row">
+          <label>Performance mode</label>
+          <label class="toggle">
+            <input type="checkbox" id="s-perf-mode">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <label>Max RAM usage (MB)</label>
+          <input type="number" id="s-ram-cap" min="256" max="8192" step="256" value="2048">
+        </div>
+        <div class="setting-row">
+          <label>Tab sleep after (minutes)</label>
+          <input type="number" id="s-tab-sleep" min="1" max="60" value="5">
+        </div>
+      </div>
+    </section>
+
+    <!-- Sidebar -->
+    <section class="settings-section" id="sec-sidebar">
+      <h2>Sidebar</h2>
+      <div class="setting-group">
+        <div class="setting-row">
+          <label>Show sidebar</label>
+          <label class="toggle">
+            <input type="checkbox" id="s-sidebar" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <label>Sidebar width (px)</label>
+          <input type="number" id="s-sidebar-width" min="240" max="600" step="20" value="320">
+        </div>
+      </div>
+    </section>
+
+    <!-- Search -->
+    <section class="settings-section" id="sec-search">
+      <h2>Search</h2>
+      <div class="setting-group">
+        <div class="setting-row">
+          <label>Show suggestions</label>
+          <label class="toggle">
+            <input type="checkbox" id="s-suggestions" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Advanced -->
+    <section class="settings-section" id="sec-advanced">
+      <h2>Advanced</h2>
+      <div class="setting-group">
+        <div class="setting-row">
+          <label>Chromium settings</label>
+          <button class="btn-secondary" id="btn-chrome-settings">Open chrome://settings</button>
+        </div>
+        <div class="setting-row">
+          <label>Chromium flags</label>
+          <button class="btn-secondary" id="btn-chrome-flags">Open chrome://flags</button>
+        </div>
+        <div class="setting-row">
+          <label>DevTools</label>
+          <button class="btn-secondary" id="btn-devtools">Open DevTools</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="lumen://settings/settings.js"></script>
+</body>
+</html>

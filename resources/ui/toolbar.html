@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="lumen://toolbar/toolbar.css">
+  <title>Toolbar</title>
+</head>
+<body>
+
+<!-- ── Tab bar ─────────────────────────────────────────────────── -->
+<div id="tab-bar">
+  <button id="profile-btn" class="profile-chip" title="Profile">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="8" r="3.5"/>
+      <path d="M4 20c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/>
+    </svg>
+    <span id="profile-name">Personal</span>
+    <svg class="profile-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 9l6 6 6-6"/>
+    </svg>
+  </button>
+
+  <div id="tabs-scroll">
+    <div id="tabs-list">
+      <!-- tabs are injected by toolbar.js -->
+    </div>
+  </div>
+
+  <button id="new-tab-btn" class="icon-btn" title="New Tab (Ctrl+T)">
+    <img src="lumen://icons/newtab.svg" alt="+">
+  </button>
+</div>
+
+<!-- ── Nav bar ─────────────────────────────────────────────────── -->
+<div id="nav-bar">
+
+  <div id="nav-left">
+    <button id="btn-back" class="icon-btn nav-btn" disabled title="Back (Alt+←)">
+      <img src="lumen://icons/back.svg" alt="Back">
+    </button>
+    <button id="btn-forward" class="icon-btn nav-btn" disabled title="Forward (Alt+→)">
+      <img src="lumen://icons/forward.svg" alt="Forward">
+    </button>
+    <button id="btn-reader" class="icon-btn nav-btn" title="Reader View">
+      <img src="lumen://icons/reader.svg" alt="Reader">
+    </button>
+  </div>
+
+  <!--
+    URL bar is absolute-centered: it sits on top of nav-bar via position:absolute.
+    nav-left and nav-right have z-index:1 so buttons remain clickable above it.
+  -->
+  <div id="address-bar-wrap">
+    <img id="favicon-display" class="favicon-sm" src="" alt="">
+    <input id="address-bar" type="text" spellcheck="false"
+           autocomplete="off" placeholder="Search or enter address">
+    <button id="btn-clear-url" class="url-clear-btn" tabindex="-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M9 9l6 6M15 9l-6 6"/>
+      </svg>
+    </button>
+  </div>
+
+  <div id="nav-right">
+    <button id="btn-translate" class="icon-btn nav-btn" title="Translate">
+      <img src="lumen://icons/translate.svg" alt="Translate">
+    </button>
+    <button id="btn-reload" class="icon-btn nav-btn" title="Reload (Ctrl+R)">
+      <img src="lumen://icons/reload.svg" alt="Reload">
+    </button>
+    <button id="btn-share" class="icon-btn nav-btn" title="Share">
+      <img src="lumen://icons/share.svg" alt="Share">
+    </button>
+    <button id="btn-download" class="icon-btn nav-btn" title="Downloads">
+      <img src="lumen://icons/download.svg" alt="Downloads">
+    </button>
+    <button id="btn-sidebar" class="icon-btn nav-btn" title="Sidebar">
+      <img src="lumen://icons/sidebar.svg" alt="Sidebar">
+    </button>
+    <button id="btn-tab-overview" class="icon-btn nav-btn" title="Tab Overview">
+      <img src="lumen://icons/tab-overview.svg" alt="Tabs">
+    </button>
+  </div>
+
+</div>
+
+<script src="lumen://toolbar/toolbar.js"></script>
+</body>
+</html>
