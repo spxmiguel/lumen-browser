@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lumen Toolbar</title>
+<!-- lumen-api.js sets up window.lumen shim over Tauri v2 invoke/listen -->
+<script src="lumen-api.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --toolbar-bg:    rgba(26, 26, 28, 0.80);
+  --nav-bg:        rgba(30, 30, 32, 0.85);
+  --tab-active:    rgba(255, 255, 255, 0.22);
+  --tab-hover:     rgba(255, 255, 255, 0.07);
+  --tab-border:    rgba(255, 255, 255, 0.14);
+  --glass-border:  rgba(255, 255, 255, 0.10);
+  --text:          rgba(255, 255, 255, 0.92);
+  --text-dim:      rgba(255, 255, 255, 0.45);
+  --icon:          rgba(255, 255, 255, 0.88);
+  --addr-bg:       rgba(58, 58, 62, 0.70);
+  --addr-focus:    rgba(72, 72, 76, 0.90);
+  --addr-ring:     rgba(10, 132, 255, 0.45);
+  --btn-hover:     rgba(255, 255, 255, 0.10);
+  --btn-active:    rgba(255, 255, 255, 0.18);
+  --accent:        #0a84ff;
+}
+
+html, body {
+  height: 85px;
+  overflow: hidden;
+  background: transparent;
+  color: var(--text);
+  font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ── Traffic Lights (custom — decorations:false) ─────────── */
+#traffic-lights {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 12px;
+  padding-right: 8px;
+  flex-shrink: 0;
+  -webkit-app-region: no-drag;
+}
+.tl-btn {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  transition: filter 0.1s;
+}
+.tl-btn:hover { filter: brightness(1.2); }
+.tl-btn:active { filter: brightness(0.85); }
+.tl-close    { background: #FF5F57; }
+.tl-minimize { background: #FEBC2E; }
+.tl-maximize { background: #28C840; }
+
+/* ── Tab Bar ─────────────────────────────────────────────── */
+#tab-bar {
+  display: flex;
+  align-items: center;
+  height: 33px;
+  padding: 4px 6px 0;
+  gap: 2px;
+  background: var(--toolbar-bg);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid var(--glass-border);
+  -webkit-app-region: drag;
+}
+
+.profile-chip {
+  display: flex; align-items: center; gap: 5px;
+  padding: 2px 8px 2px 6px;
+  border: none; border-radius: 14px;
+  background: var(--tab-active);
+  color: var(--text);
+  font-size: 12px; font-weight: 500;
+  cursor: pointer; height: 26px;
+  min-width: 0; flex-shrink: 0;
+  -webkit-app-region: no-drag;
+}
+.profile-chip svg { width: 14px; height: 14px; }
+.profile-chip .chevron { opacity: 0.5; width: 11px; height: 11px; }
+.profile-chip:hover { background: var(--btn-hover); }
+
+#tabs-scroll {
+  flex: 1; overflow: hidden;
+  display: flex; align-items: flex-end; height: 100%;
+  -webkit-app-region: drag;
+}
+#tabs-list {
+  display: flex; align-items: flex-end;
+  gap: 1px; height: 100%;
+  max-width: 100%; overflow: hidden;
+  -webkit-app-region: drag;
+}
+
+.tab {
+  display: flex; align-items: center;
+  height: 29px; padding: 0 8px;
+  border-radius: 6px 6px 0 0;
+  background: transparent;
+  gap: 6px;
+  min-width: 90px; max-width: 200px;
+  cursor: pointer;
+  color: var(--text-dim);
+  transition: background 0.15s, color 0.15s;
+  -webkit-app-region: no-drag;
+  flex-shrink: 1;
+  overflow: hidden;
+}
+.tab:hover { background: var(--tab-hover); color: var(--text); }
+.tab.active {
+  background: var(--tab-active);
+  color: var(--text);
+  border: 1px solid var(--tab-border);
+  border-bottom: none;
+}
+.tab .fav {
+  width: 14px; height: 14px; flex-shrink: 0;
+  border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+}
+.tab .fav img { width: 14px; height: 14px; border-radius: 2px; }
+.tab-title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.tab-x {
+  background: none; border: none; color: inherit;
+  cursor: pointer; padding: 0; border-radius: 50%;
+  width: 16px; height: 16px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; opacity: 0; transition: opacity 0.1s;
+  -webkit-app-region: no-drag;
+}
+.tab:hover .tab-x { opacity: 0.55; }
+.tab.active .tab-x { opacity: 0.45; }
+.tab-x:hover { opacity: 1 !important; background: rgba(255,255,255,0.18); }
+
+.tab-spinner {
+  width: 12px; height: 12px; flex-shrink: 0;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+.tab.loading .tab-spinner { display: block; }
+.tab.loading .fav { display: none; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.icon-btn {
+  background: none; border: none;
+  color: var(--icon);
+  width: 28px; height: 28px; border-radius: 7px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.12s;
+  flex-shrink: 0;
+  -webkit-app-region: no-drag;
+}
+.icon-btn svg {
+  width: 16px; height: 16px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round;
+  opacity: 0.85;
+}
+.icon-btn:hover { background: var(--btn-hover); }
+.icon-btn:hover svg { opacity: 1; }
+.icon-btn:active { background: var(--btn-active); }
+.icon-btn:disabled { cursor: default; opacity: 0.35; }
+
+/* ── Nav Bar ─────────────────────────────────────────────── */
+#nav-bar {
+  display: flex; align-items: center;
+  height: 52px; padding: 0 10px;
+  background: var(--nav-bg);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid var(--glass-border);
+  position: relative;
+  -webkit-app-region: drag;
+}
+
+#nav-left, #nav-right {
+  display: flex; align-items: center; gap: 1px;
+  flex-shrink: 0; z-index: 1;
+  -webkit-app-region: no-drag;
+}
+#nav-right { margin-left: auto; }
+
+/* Address bar */
+#addr-wrap {
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  width: 580px; max-width: calc(100% - 300px);
+  height: 30px;
+  background: var(--addr-bg);
+  border-radius: 9999px;
+  display: flex; align-items: center;
+  padding: 0 12px; gap: 6px;
+  transition: background 0.15s, box-shadow 0.15s;
+  cursor: text;
+  z-index: 0;
+  -webkit-app-region: no-drag;
+}
+#addr-wrap:focus-within {
+  background: var(--addr-focus);
+  box-shadow: 0 0 0 3px var(--addr-ring);
+}
+.lock-icon { opacity: 0.55; flex-shrink: 0; }
+.lock-icon svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+#addr-input {
+  flex: 1; background: transparent; border: none; outline: none;
+  color: var(--text); font-size: 13px; font-family: inherit;
+  text-align: center; min-width: 0;
+}
+#addr-input:focus { text-align: left; }
+#addr-input::selection { background: rgba(10,132,255,0.30); }
+
+/* Loading bar */
+#progress-bar {
+  position: absolute;
+  top: 33px; left: 0;
+  height: 2px;
+  background: var(--accent);
+  width: 0%;
+  transition: width 0.3s ease;
+  z-index: 200;
+  pointer-events: none;
+}
+#progress-bar.hidden { opacity: 0; }
+
+/* Game mode indicator */
+#game-mode-badge {
+  display: none;
+  align-items: center; gap: 4px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(48, 209, 88, 0.15);
+  border: 1px solid rgba(48, 209, 88, 0.30);
+  color: #30d158;
+  font-size: 11px; font-weight: 500;
+  flex-shrink: 0;
+  -webkit-app-region: no-drag;
+}
+#game-mode-badge.visible { display: flex; }
+</style>
+</head>
+<body>
+
+<div id="progress-bar" class="hidden"></div>
+
+<!-- TAB BAR -->
+<div id="tab-bar">
+
+  <!-- Custom traffic lights (window has decorations:false) -->
+  <div id="traffic-lights">
+    <button class="tl-btn tl-close"    title="Close"    onclick="window.lumen?.closeWindow()"></button>
+    <button class="tl-btn tl-minimize" title="Minimize" onclick="window.lumen?.minimizeWindow()"></button>
+    <button class="tl-btn tl-maximize" title="Maximize" onclick="window.lumen?.maximizeWindow()"></button>
+  </div>
+
+  <button class="profile-chip" title="Profile">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="8" r="3.5"/>
+      <path d="M4 20c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/>
+    </svg>
+    <span>Personal</span>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 9l6 6 6-6"/>
+    </svg>
+  </button>
+
+  <div id="tabs-scroll"><div id="tabs-list"></div></div>
+
+  <button class="icon-btn" id="btn-newtab" title="New Tab">
+    <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
+
+</div><!-- /tab-bar -->
+
+<!-- NAV BAR -->
+<div id="nav-bar">
+
+  <div id="nav-left">
+    <button class="icon-btn" id="btn-back" disabled title="Back">
+      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="icon-btn" id="btn-fwd" disabled title="Forward">
+      <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <button class="icon-btn" id="btn-reader" title="Reader View">
+      <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 12h8M8 15h5"/></svg>
+    </button>
+  </div>
+
+  <div id="addr-wrap">
+    <span class="lock-icon">
+      <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+    </span>
+    <input id="addr-input" type="text" placeholder="Search or enter address" spellcheck="false" autocomplete="off">
+  </div>
+
+  <div id="nav-right">
+    <div id="game-mode-badge" title="Game Mode active">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 12h4m-2-2v4"/><circle cx="15" cy="11" r="1" fill="currentColor"/><circle cx="18" cy="13" r="1" fill="currentColor"/>
+        <path d="M2 9.5C2 7 4 5 6.5 5h11C20 5 22 7 22 9.5v5c0 2.5-2 4.5-4.5 4.5h-11C4 19 2 17 2 14.5v-5z"/>
+      </svg>
+      Game
+    </div>
+    <button class="icon-btn" id="btn-game-mode" title="Toggle Game Mode">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 12h4m-2-2v4"/><circle cx="15" cy="11" r="1" fill="currentColor"/><circle cx="18" cy="13" r="1" fill="currentColor"/>
+        <path d="M2 9.5C2 7 4 5 6.5 5h11C20 5 22 7 22 9.5v5c0 2.5-2 4.5-4.5 4.5h-11C4 19 2 17 2 14.5v-5z"/>
+      </svg>
+    </button>
+    <button class="icon-btn" id="btn-reload" title="Reload">
+      <svg viewBox="0 0 24 24"><path d="M4 4v5h5"/><path d="M20 20v-5h-5"/><path d="M4 9a8 8 0 0114.3-3M20 15A8 8 0 015.7 18"/></svg>
+    </button>
+    <button class="icon-btn" title="Share">
+      <svg viewBox="0 0 24 24"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+    </button>
+    <button class="icon-btn" title="Downloads">
+      <svg viewBox="0 0 24 24"><path d="M12 3v13m-4-4l4 4 4-4"/><path d="M4 20h16"/></svg>
+    </button>
+    <button class="icon-btn" title="Sidebar">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+    </button>
+    <button class="icon-btn" title="Tab Overview">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>
+    </button>
+  </div>
+
+</div><!-- /nav-bar -->
+
+<script>
+'use strict';
+let tabs = [];
+let activeUrl = '';
+let navState  = { canGoBack: false, canGoForward: false };
+
+// ── Loading animation ─────────────────────────────────────────
+let loadProgress = 0;
+let loadTimer = null;
+
+function startLoading() {
+  const bar = document.getElementById('progress-bar');
+  bar.classList.remove('hidden');
+  loadProgress = 10;
+  bar.style.width = '10%';
+  clearInterval(loadTimer);
+  loadTimer = setInterval(() => {
+    if (loadProgress < 85) {
+      loadProgress += Math.random() * 8;
+      bar.style.width = Math.min(loadProgress, 85) + '%';
+    }
+  }, 200);
+}
+
+function stopLoading() {
+  const bar = document.getElementById('progress-bar');
+  clearInterval(loadTimer);
+  bar.style.width = '100%';
+  setTimeout(() => {
+    bar.style.width = '0%';
+    bar.classList.add('hidden');
+  }, 300);
+}
+
+// ── Render tabs ───────────────────────────────────────────────
+function renderTabs(tabList) {
+  const list = document.getElementById('tabs-list');
+  list.innerHTML = '';
+  tabList.forEach(tab => {
+    const el = document.createElement('div');
+    el.className = 'tab' + (tab.active ? ' active' : '') + (tab.loading ? ' loading' : '');
+    el.dataset.id = tab.id;
+
+    const spinner = document.createElement('div');
+    spinner.className = 'tab-spinner';
+
+    const fav = document.createElement('div');
+    fav.className = 'fav';
+    if (tab.favicon) {
+      const img = document.createElement('img');
+      img.src = tab.favicon;
+      img.onerror = () => { fav.textContent = '🌐'; };
+      fav.appendChild(img);
+    } else {
+      fav.textContent = '🌐';
+    }
+
+    const title = document.createElement('span');
+    title.className = 'tab-title';
+    title.textContent = tab.title || 'New Tab';
+
+    const xBtn = document.createElement('button');
+    xBtn.className = 'tab-x';
+    xBtn.innerHTML = '×';
+    xBtn.title = 'Close tab';
+    xBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      window.lumen?.closeTab(tab.id);
+    });
+
+    el.appendChild(spinner);
+    el.appendChild(fav);
+    el.appendChild(title);
+    el.appendChild(xBtn);
+
+    el.addEventListener('click', () => window.lumen?.switchTab(tab.id));
+    list.appendChild(el);
+  });
+}
+
+function updateNavBar(url, ns) {
+  const input = document.getElementById('addr-input');
+  if (document.activeElement !== input) {
+    let display = url;
+    try {
+      const u = new URL(url);
+      display = u.hostname + (u.pathname !== '/' ? u.pathname : '');
+      if (!display || display === 'newtab') display = '';
+    } catch { display = url === 'lumen://newtab' ? '' : url; }
+    input.value = display;
+  }
+  document.getElementById('btn-back').disabled = !ns?.canGoBack;
+  document.getElementById('btn-fwd').disabled  = !ns?.canGoForward;
+}
+
+// ── IPC listeners ─────────────────────────────────────────────
+// Wait for Tauri's __TAURI__ global to be available before setting up listeners
+function initLumen() {
+  if (!window.lumen || !window.__TAURI__) {
+    requestAnimationFrame(initLumen);
+    return;
+  }
+
+  window.lumen.onTabsUpdate((tabList, url, ns) => {
+    tabs = tabList;
+    activeUrl = url;
+    navState = ns || navState;
+    renderTabs(tabList);
+    updateNavBar(url, ns);
+  });
+
+  window.lumen.onLoadStart(() => startLoading());
+  window.lumen.onLoadStop(()  => stopLoading());
+
+  window.lumen.onGameModeChanged((enabled) => {
+    const badge = document.getElementById('game-mode-badge');
+    const btn   = document.getElementById('btn-game-mode');
+    badge.classList.toggle('visible', enabled);
+    btn.style.color = enabled ? '#30d158' : '';
+  });
+
+  // Load initial state
+  window.lumen.getTabs().then(data => {
+    if (data && data.tabs) {
+      renderTabs(data.tabs);
+      if (data.navState) updateNavBar(data.navState.url, data.navState);
+    }
+  }).catch(() => {});
+
+  window.lumen.getGameMode().then(enabled => {
+    const badge = document.getElementById('game-mode-badge');
+    const btn   = document.getElementById('btn-game-mode');
+    badge.classList.toggle('visible', enabled);
+    btn.style.color = enabled ? '#30d158' : '';
+  }).catch(() => {});
+}
+
+initLumen();
+
+// ── Address bar ───────────────────────────────────────────────
+const addrInput = document.getElementById('addr-input');
+addrInput.addEventListener('focus', () => addrInput.select());
+addrInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const url = addrInput.value.trim();
+    if (url) window.lumen?.navigate(url);
+    addrInput.blur();
+  }
+  if (e.key === 'Escape') addrInput.blur();
+});
+
+// ── Nav buttons ───────────────────────────────────────────────
+document.getElementById('btn-back').addEventListener('click',   () => window.lumen?.goBack());
+document.getElementById('btn-fwd').addEventListener('click',    () => window.lumen?.goForward());
+document.getElementById('btn-reload').addEventListener('click', () => {
+  const loading = tabs.some(t => t.active && t.loading);
+  if (loading) window.lumen?.stop();
+  else         window.lumen?.reload();
+});
+document.getElementById('btn-newtab').addEventListener('click', () => window.lumen?.newTab());
+
+let gameModeOn = false;
+document.getElementById('btn-game-mode').addEventListener('click', () => {
+  gameModeOn = !gameModeOn;
+  window.lumen?.setGameMode(gameModeOn);
+});
+</script>
+</body>
+</html>

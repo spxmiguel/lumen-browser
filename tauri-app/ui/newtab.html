@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>New Tab</title>
+<script src="lumen-api.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --accent: #0a84ff;
+  --text:   rgba(255,255,255,0.88);
+  --text-dim: rgba(255,255,255,0.45);
+  --glass:  rgba(255,255,255,0.07);
+  --glass-border: rgba(255,255,255,0.12);
+  --search-bg: rgba(255,255,255,0.10);
+  --search-focus: rgba(255,255,255,0.15);
+}
+
+html, body {
+  height: 100%; overflow: hidden;
+  background: radial-gradient(ellipse at 50% 60%, #1a1a2e 0%, #0d0d1a 100%);
+  color: var(--text);
+  font-family: -apple-system, 'SF Pro Display', 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.center {
+  height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 32px;
+  padding: 24px;
+}
+
+/* Clock */
+#clock {
+  font-size: 72px;
+  font-weight: 200;
+  letter-spacing: -2px;
+  color: var(--text);
+  line-height: 1;
+  text-shadow: 0 0 40px rgba(10,132,255,0.15);
+}
+#date {
+  font-size: 16px;
+  color: var(--text-dim);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  margin-top: -20px;
+}
+
+/* Search bar */
+#search-wrap {
+  width: 520px; max-width: calc(100vw - 48px);
+  height: 46px;
+  background: var(--search-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 9999px;
+  display: flex; align-items: center;
+  padding: 0 18px; gap: 10px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: background 0.15s, box-shadow 0.15s, border-color 0.15s;
+  cursor: text;
+}
+#search-wrap:focus-within {
+  background: var(--search-focus);
+  border-color: rgba(10,132,255,0.40);
+  box-shadow: 0 0 0 3px rgba(10,132,255,0.15);
+}
+.search-icon {
+  flex-shrink: 0; opacity: 0.45;
+  width: 16px; height: 16px;
+  stroke: currentColor; fill: none;
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+#search-input {
+  flex: 1; background: transparent; border: none; outline: none;
+  color: var(--text); font-size: 15px;
+  font-family: inherit;
+  user-select: text; -webkit-user-select: text;
+}
+#search-input::placeholder { color: var(--text-dim); }
+
+/* Quick links */
+#quick-links {
+  display: flex; gap: 16px;
+  flex-wrap: wrap; justify-content: center;
+}
+.quick-link {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  text-decoration: none; color: var(--text-dim);
+  transition: color 0.15s, transform 0.15s;
+  width: 68px;
+}
+.quick-link:hover { color: var(--text); transform: translateY(-2px); }
+.quick-link-icon {
+  width: 48px; height: 48px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background 0.15s;
+}
+.quick-link:hover .quick-link-icon { background: rgba(255,255,255,0.12); }
+.quick-link-label { font-size: 11px; text-align: center; }
+
+/* Background particles (CSS only) */
+.bg {
+  position: fixed; inset: 0; pointer-events: none; z-index: -1;
+  overflow: hidden;
+}
+.orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px); opacity: 0.12;
+}
+.orb-1 { width: 400px; height: 400px; background: #0a84ff; top: -100px; left: -100px; }
+.orb-2 { width: 300px; height: 300px; background: #5e5ce6; bottom: -80px; right: -80px; }
+.orb-3 { width: 200px; height: 200px; background: #30d158; top: 50%; left: 55%; }
+</style>
+</head>
+<body>
+<div class="bg">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<div class="center">
+  <div>
+    <div id="clock">00:00</div>
+    <div id="date">Thursday, January 1</div>
+  </div>
+
+  <div id="search-wrap">
+    <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+    <input id="search-input" type="text" placeholder="Search Google or enter address" spellcheck="false" autocomplete="off">
+  </div>
+
+  <div id="quick-links">
+    <a class="quick-link" href="https://google.com">
+      <div class="quick-link-icon">🔍</div>
+      <span class="quick-link-label">Google</span>
+    </a>
+    <a class="quick-link" href="https://youtube.com">
+      <div class="quick-link-icon">▶️</div>
+      <span class="quick-link-label">YouTube</span>
+    </a>
+    <a class="quick-link" href="https://github.com">
+      <div class="quick-link-icon">🐙</div>
+      <span class="quick-link-label">GitHub</span>
+    </a>
+    <a class="quick-link" href="https://chat.openai.com">
+      <div class="quick-link-icon">💬</div>
+      <span class="quick-link-label">ChatGPT</span>
+    </a>
+    <a class="quick-link" href="https://claude.ai">
+      <div class="quick-link-icon">✦</div>
+      <span class="quick-link-label">Claude</span>
+    </a>
+    <a class="quick-link" href="https://twitter.com">
+      <div class="quick-link-icon">𝕏</div>
+      <span class="quick-link-label">X</span>
+    </a>
+  </div>
+</div>
+
+<script>
+// Clock
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2, '0');
+  const m = String(now.getMinutes()).padStart(2, '0');
+  document.getElementById('clock').textContent = h + ':' + m;
+
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('date').textContent =
+    days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate();
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// Search — wait for lumen API
+function doNavigate(url) {
+  if (window.lumen) window.lumen.navigate(url);
+  else window.location.href = url;
+}
+
+const input = document.getElementById('search-input');
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const val = input.value.trim();
+    if (!val) return;
+    let url;
+    if (/^https?:\/\//i.test(val)) url = val;
+    else if (/^[\w.-]+\.\w{2,}(\/|$)/.test(val) && !val.includes(' ')) url = 'https://' + val;
+    else url = 'https://www.google.com/search?q=' + encodeURIComponent(val);
+    doNavigate(url);
+  }
+});
+
+// Quick links — intercept to use Tauri navigation (keeps tab state in sync)
+document.querySelectorAll('.quick-link').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    doNavigate(a.href);
+  });
+});
+
+// Auto-focus search on load
+window.addEventListener('load', () => {
+  setTimeout(() => input.focus(), 100);
+});
+</script>
+</body>
+</html>

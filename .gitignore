@@ -38,3 +38,15 @@ compile_commands.json
 # Ninja
 .ninja_deps
 .ninja_log
+
+# Node / Tauri
+tauri-app/node_modules/
+tauri-app/src-tauri/target/
+
+# Electron (legacy)
+electron-app/node_modules/
+electron-app/dist/
+
+# Misc
+*.command
+*.DS_Store
